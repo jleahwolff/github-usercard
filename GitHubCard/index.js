@@ -3,7 +3,17 @@
 https://api.github.com/users/<your name>
 */
 
-axios.get('https://api.github.com/users/jleahwolff');
+axios.get('https://api.github.com/users/jleahwolff')
+.then(response => {
+  usercard(response.data)
+  console.log(response.data);
+})
+
+.catch(err => {
+  console.log(err)
+});
+
+const entryPoint = document.querySelector('.cards');
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
 github info! You will need to understand the structure of this 
@@ -45,8 +55,8 @@ const followersArray = [];
     <p>Bio: {users bio}</p>
   </div>
 </div>
-
 */
+
 function usercard (data){
 //variables
 const bigDiv = document.createElement('div');
@@ -54,8 +64,11 @@ const userImg = document.createElement('img');
 const cardInfo = document.createElement('div');
 const nameHead = document.createElement('h3');
 const userName = document.createElement('p');
+const userLocation = document.createElement('p');
 const profilePara = document.createElement('p');
-const addressLink = document.createElement('a');
+//inside profile para
+  const addressLink = document.createElement('a');
+  //-----------------
 const folloWers = document.createElement('p');
 const folloWing = document.createElement('p');
 const biography = document.createElement('p');
@@ -65,28 +78,48 @@ cardInfo.classList.add('card-info');
 nameHead.classList.add('name');
 userName.classList.add('username');
 //append
-bigDiv.appendChild('userImg');
-bigDiv.appendChild('cardInfo');
-cardInfo.appendChild('nameHead');
-cardInfo.appendChild('userName');
-cardInfo.appendChild('profilePara');
-cardInfo.appendChild('addressLink');
-cardInfo.appendChild('folloWers');
-cardInfo.appendChild('folloWing');
-cardInfo.appendChild('biography');
-
-}
+bigDiv.appendChild(userImg);
+bigDiv.appendChild(cardInfo);
+cardInfo.appendChild(nameHead);
+cardInfo.appendChild(userName);
+cardInfo.appendChild(userLocation);
+cardInfo.appendChild(profilePara);
+profilePara.appendChild(addressLink);
+cardInfo.appendChild(folloWers);
+cardInfo.appendChild(folloWing);
+cardInfo.appendChild(biography);
 
 //setting text content
-nameHead.textContent = data.
+userImg.setAttribute('src', data.avatar_url);
+nameHead.textContent = data.name;
+userName.textContent = data.login;
+userLocation.textContent = data.location;
+profilePara.textContent = `Profile: ${data.html_url}`;
+folloWers.textContent = `Followers: ${data.followers}`;
+folloWing.textContent = `Following: ${data.following}`;
+biography.textContent = data.bio;
+
+entryPoint.appendChild(bigDiv);
+
+return bigDiv;
+};
 
 
+// const entryPoint = document.querySelector('.cards');
 
-
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
-*/
+axios.get('https://api.github.com/users/jleahwolff/followers')
+.then(response => {
+  console.log(response.data)
+  // console.log(response);
+  response.data.forEach(e => {
+    // console.log(e);
+    // usercard(e);
+    axios.get(e.url).then(
+    ).catch(err => {
+      console.log(err);
+    })
+  })
+})
+.catch(err => {
+  console.log(err);
+});
