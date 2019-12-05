@@ -109,12 +109,15 @@ return bigDiv;
 
 axios.get('https://api.github.com/users/jleahwolff/followers')
 .then(response => {
-  console.log(response.data)
+  // console.log(response)
   // console.log(response);
   response.data.forEach(e => {
     // console.log(e);
     // usercard(e);
-    axios.get(e.url).then(
+    axios.get(e.url).then(response => {
+      console.log(response.data)
+      usercard(response.data)
+    }
     ).catch(err => {
       console.log(err);
     })
